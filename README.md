@@ -9,7 +9,7 @@ Use [alien-signals](https://github.com/stackblitz/alien-signals) with the interf
 
 ## Credits
 
-- The ability of deepsignal comes from [deepsignal](https://github.com/luisherranz/deepsignal)
+- The ability of deepsignal comes from [deepsignal](https://github.com/luisherranz/deepsignal), thank [luisherranz](https://github.com/luisherranz).
 
 ## Features
 
