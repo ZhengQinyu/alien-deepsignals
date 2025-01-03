@@ -68,8 +68,6 @@ const get =
         !signals.has(key) &&
         typeof descriptor(target, key)?.get === "function"
       ) {
-        console.log("get", target, fullKey, receiver, key);
-
         signals.set(
           key,
           computed(() => Reflect.get(target, key, receiver))
