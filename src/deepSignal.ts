@@ -278,7 +278,7 @@ type DeepSignalArray<T> = DeepArray<ArrayType<T>> & {
 export type Shallow<T extends object> = T & { [isShallow]: true };
 
 export declare const useDeepSignal: <T extends object>(obj: T) => DeepSignal<T>;
-
+// @ts-ignore
 type FilterSignals<K> = K extends `$${infer P}` ? never : K;
 type RevertDeepSignalObject<T> = Pick<T, FilterSignals<keyof T>>;
 type RevertDeepSignalArray<T> = Omit<T, "$" | "$length">;
