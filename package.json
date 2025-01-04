@@ -1,6 +1,6 @@
 {
   "name": "alien-deepsignals",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "author": "CCherry07",
   "module": "dist/index.js",
@@ -11,8 +11,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     }
   },
   "description": "AlienDeepSignals 🧶 -alien signals, but using regular JavaScript objects",
