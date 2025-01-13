@@ -2,12 +2,12 @@ import type { Options } from 'tsup'
 
 export const tsup: Options = {
   entry: [
-    'src/*.ts',
+    'src/index.ts',
   ],
-  format: 'esm',
+  format: ['esm', 'cjs'],
   dts: true,
   splitting: true,
   clean: true,
   shims: false,
-  external:['alien-signals'],
+  external: ['alien-signals'],
 }

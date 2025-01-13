@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       alien-signals:
-        specifier: ^0.4.12
-        version: 0.4.12
+        specifier: latest
+        version: 0.6.0
     devDependencies:
       bumpp:
         specifier: ^9.9.2
@@ -476,8 +476,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  alien-signals@0.4.12:
-    resolution: {integrity: sha512-Og0PgAihxlp1R22bsoBsyhhMG4+qhU+fkkLPoGBQkYVc3qt9rYnrwYTf+M6kqUqUZpf3rXDnpL90iKa0QcSVVg==}
+  alien-signals@0.6.0:
+    resolution: {integrity: sha512-2uVYGg0IY07glpXb7uu+mGuJFxEO0Blp3c3bagwxK9E5Fh6AKcXoUb7iDaa584FW7vEKPoNoy+2UOy39/eLiwg==}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -1386,7 +1386,7 @@ snapshots:
 
   acorn@8.14.0: {}
 
-  alien-signals@0.4.12: {}
+  alien-signals@0.6.0: {}
 
   ansi-regex@5.0.1: {}
 
