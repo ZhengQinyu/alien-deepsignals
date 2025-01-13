@@ -11,4 +11,7 @@ export class Computed<T = any> extends AlienComputed {
   get value(): T {
     return this.get();
   }
+  peek(): T {
+    return this.currentValue;
+  }
 }
