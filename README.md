@@ -14,7 +14,7 @@ Use [alien-signals](https://github.com/stackblitz/alien-signals) with the interf
 ## Features
 
 - **Transparent**: `deepsignal` wraps the object with a proxy that intercepts all property accesses, but does not modify how you interact with the object. This means that you can still use the object as you normally would, and it will behave exactly as you would expect, except that mutating the object also updates the value of the underlying signals.
-- **Tiny (less than 1kB)**: `deepsignal` is designed to be lightweight and has a minimal footprint, making it easy to include in your projects. It's just a small wrapper around `@preact/signals-core`.
+- **Tiny (less than 1kB)**: `deepsignal` is designed to be lightweight and has a minimal footprint, making it easy to include in your projects. It's just a small wrapper around `alien-signals`.
 - **Full array support**: `deepsignal` fully supports arrays, including nested arrays.
 - **Deep**: `deepsignal` converts nested objects and arrays to deep signal objects/arrays, allowing you to create fully reactive data structures.
 - **Lazy initialization**: `deepsignal` uses lazy initialization, which means that signals and proxies are only created when they are accessed for the first time. This reduces the initialization time to almost zero and improves the overall performance in cases where you only need to observe a small subset of the object's properties.
@@ -44,6 +44,6 @@ const state = deepSignal({
   array: [1, 2, 3],
 });
 state.count++;
-state.$nested.deep = 'new value';
-state.$array.push(4);
+state.$nested.value.deep = 'new value';
+state.$array.value.push(4);
 ```
