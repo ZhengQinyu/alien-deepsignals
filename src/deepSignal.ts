@@ -98,7 +98,7 @@ const objectHandlers = {
       if (!(val instanceof Signal)) throwOnMutation();
       const key = fullKey.replace(rg, "");
       signals.set(key, val);
-      return Reflect.set(target, key, val(), receiver);
+      return Reflect.set(target, key, val.peek(), receiver);
     } else {
       let internal = val;
       if (shouldProxy(val)) {

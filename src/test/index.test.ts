@@ -1,7 +1,6 @@
-import { effect } from "alien-signals";
 import { deepSignal, peek, RevertDeepSignal, shallow } from "../index"
 import { describe, it, expect, beforeEach } from "vitest"
-import { signal, Signal } from "../signal";
+import { signal, Signal, effect } from "..";
 type Store = {
 	a?: number;
 	nested: { b?: number };

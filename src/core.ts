@@ -67,8 +67,12 @@ export class Signal<T = any> implements Dependency {
     }
   }
 
-  value(): T {
+  get value(): T {
     return this.get();
+  }
+
+  set value(value: T) {
+    this.set(value);
   }
 
   peek(): T {
@@ -126,12 +130,12 @@ export class Computed<T = any> implements Subscriber, Dependency {
     }
   }
 
-  peek(): T {
-    return this.currentValue!;
+  get value(): Readonly<T> {
+    return this.get();
   }
 
-  value(): Readonly<T> {
-    return this.get();
+  peek(): T {
+    return this.currentValue!;
   }
 }
 
