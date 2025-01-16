@@ -1,5 +1,4 @@
-import { computed } from "./computed";
-import { signal, Signal } from "./signal"
+import { computed, Signal, signal } from "./core";
 
 const proxyToSignals = new WeakMap();
 const objToProxy = new WeakMap();
@@ -99,7 +98,7 @@ const objectHandlers = {
       if (!(val instanceof Signal)) throwOnMutation();
       const key = fullKey.replace(rg, "");
       signals.set(key, val);
-      return Reflect.set(target, key, val.peek(), receiver);
+      return Reflect.set(target, key, val(), receiver);
     } else {
       let internal = val;
       if (shouldProxy(val)) {

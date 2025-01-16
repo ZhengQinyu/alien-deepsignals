@@ -1,3 +1,2 @@
-export * from "./computed";
-export * from "./signal";
+export * from "./core";
 export * from "./deepSignal";

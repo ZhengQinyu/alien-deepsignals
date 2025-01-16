@@ -24,7 +24,7 @@
     "release": "bumpp && npm run build && npm publish --registry=https://registry.npmjs.org/"
   },
   "dependencies": {
-    "alien-signals": "latest"
+    "alien-signals": "^1.0.0"
   },
   "devDependencies": {
     "bumpp": "^9.9.2",

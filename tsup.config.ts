@@ -9,5 +9,6 @@ export const tsup: Options = {
   splitting: true,
   clean: true,
   shims: false,
+  minify: false,
   external: ['alien-signals'],
 }
