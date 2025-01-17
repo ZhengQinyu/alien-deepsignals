@@ -38,7 +38,7 @@ export function signal<T>(oldValue?: T): Signal<T | undefined> {
 }
 
 export class Signal<T = any> implements Dependency {
-  public readonly [ReactiveFlags.IS_REFERENCE] = true
+  public readonly [ReactiveFlags.IS_SIGNAL] = true
   // Dependency fields
   subs: Link | undefined = undefined;
   subsTail: Link | undefined = undefined;
@@ -85,7 +85,7 @@ export function computed<T>(getter: () => T): Computed<T> {
 }
 
 export class Computed<T = any> implements Subscriber, Dependency {
-  readonly [ReactiveFlags.IS_REFERENCE] = true
+  readonly [ReactiveFlags.IS_SIGNAL] = true
   currentValue: T | undefined = undefined;
 
   // Dependency fields
@@ -146,7 +146,7 @@ export function effect<T>(fn: () => T): Effect<T> {
 }
 
 export class Effect<T = any> implements Subscriber {
-  readonly [ReactiveFlags.IS_REFERENCE] = true
+  readonly [ReactiveFlags.IS_SIGNAL] = true
   // Subscriber fields
   deps: Link | undefined = undefined;
   depsTail: Link | undefined = undefined;
@@ -194,8 +194,8 @@ export function batch<T>(fn: () => T): T {
 }
 
 export function isSignal<T>(r: Signal<T> | unknown): r is Signal<T>
-export function isSignal(r: any): r is Signal {
-  return r ? r[ReactiveFlags.IS_REFERENCE] === true : false
+export function isSignal(s: any): s is Signal {
+  return s ? s[ReactiveFlags.IS_SIGNAL] === true : false
 }
 
 export type MaybeSignal<T = any> =

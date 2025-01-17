@@ -1,3 +1,3 @@
 export enum ReactiveFlags {
-  IS_REFERENCE = '__v_isReference',
+  IS_SIGNAL = '__v_isSignal',
 }
