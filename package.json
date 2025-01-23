@@ -27,6 +27,7 @@
     "alien-signals": "^1.0.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.9",
     "bumpp": "^9.9.2",
     "tsup": "^8.3.5",
     "typescript": "^5.4.3",
