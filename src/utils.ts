@@ -1,6 +1,3 @@
-import { ReactiveFlags } from "./contents"
-import { isSignal } from "./core"
-
 export const objectToString: typeof Object.prototype.toString =
   Object.prototype.toString
 export const toTypeString = (value: unknown): string =>
@@ -40,41 +37,3 @@ export const isPlainObject = (val: unknown): val is object =>
 
 export const hasChanged = (value: any, oldValue: any): boolean =>
   !Object.is(value, oldValue)
-
-export function traverse(
-  value: unknown,
-  depth: number = Infinity,
-  seen?: Set<unknown>,
-): unknown {
-  if (depth <= 0 || !isObject(value) || (value as any)[ReactiveFlags.SKIP]) {
-    return value
-  }
-
-  seen = seen || new Set()
-  if (seen.has(value)) {
-    return value
-  }
-  seen.add(value)
-  depth--
-  if (isSignal(value)) {
-    traverse(value.value, depth, seen)
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      traverse(value[i], depth, seen)
-    }
-  } else if (isSet(value) || isMap(value)) {
-    value.forEach((v: any) => {
-      traverse(v, depth, seen)
-    })
-  } else if (isPlainObject(value)) {
-    for (const key in value) {
-      traverse(value[key], depth, seen)
-    }
-    for (const key of Object.getOwnPropertySymbols(value)) {
-      if (Object.prototype.propertyIsEnumerable.call(value, key)) {
-        traverse(value[key as any], depth, seen)
-      }
-    }
-  }  
-  return value
-}

@@ -1,7 +1,6 @@
 import { deepSignal, peek, RevertDeepSignal, shallow } from "../index"
-import { describe, it, expect, beforeEach, test } from "vitest"
+import { describe, it, expect, beforeEach } from "vitest"
 import { signal, Signal, effect } from "..";
-import { watch } from "../watch";
 type Store = {
 	a?: number;
 	nested: { b?: number };
@@ -1112,25 +1111,3 @@ describe("deepsignal/core", () => {
 		});
 	});
 });
-
-
-describe('watch', () => {
-	test('abc', () => {
-		const store = deepSignal({
-			userinfo: {
-				name: "tom"
-			}
-		})
-		const stop = watch(store, (newValue, oldValue) => {
-			console.log('newValue', newValue);
-			console.log('oldValue', oldValue);
-		}, {
-			immediate: true,
-			deep: true,
-		})
-
-		store.userinfo.name = "jon"
-		stop()
-		store.userinfo.name = 'jon2'
-	})
-})
