@@ -47,3 +47,24 @@ state.count++;
 state.$nested.value.deep = 'new value';
 state.$array.value.push(4);
 ```
+### watch
+```ts
+import { deepSignal, watch } from 'alien-deepsignals';
+const state = deepSignal({
+  count: 0,
+  name: 'John',
+  nested: {
+    deep: 'value',
+  },
+  array: [1, 2, 3],
+});
+
+watch(state,(value)=>{
+  console.log(value);
+},{
+  deep: true,
+  immediate: true,
+  // once
+})
+```
+
