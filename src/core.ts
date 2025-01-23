@@ -1,5 +1,6 @@
 import { createReactiveSystem, Dependency, Link, Subscriber, SubscriberFlags } from 'alien-signals';
 import { ReactiveFlags } from "./contents"
+import { isFunction } from './utils';
 const {
   link,
   propagate,
@@ -237,9 +238,6 @@ export type MaybeSignalOrGetter<T = any> = MaybeSignal<T> | Computed<T> | (() =>
 export function unSignal<T>(signal: MaybeSignal<T> | Computed<T>): T {
   return (isSignal(signal) ? signal.value : signal) as T;
 }
-
-export const isFunction = (val: unknown): val is Function =>
-  typeof val === 'function'
 
 export function toValue<T>(source: MaybeSignalOrGetter<T>): T {
   return isFunction(source) ? source() : unSignal(source)

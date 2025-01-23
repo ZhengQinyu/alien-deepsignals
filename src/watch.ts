@@ -1,5 +1,5 @@
 import { Computed, Effect, isSignal, Signal } from './core';
-import { hasChanged, isArray, isMap, isObject, isPlainObject, isSet } from './utils';
+import { hasChanged, isArray, isMap, isObject, isPlainObject, isSet, NOOP } from './utils';
 import { isDeepSignal, isShallow } from "./deepSignal"
 import { ReactiveFlags } from './contents';
 
@@ -69,9 +69,7 @@ export function watch(
     getter = () => source.value
     forceTrigger = isShallow(source)
   } else if (isDeepSignal(source)) {
-    getter = () => {
-      return signalGetter(source)
-    }
+    getter = () => signalGetter(source)
     forceTrigger = true
   } else if (isArray(source)) {
     isMultiSource = true
@@ -84,6 +82,14 @@ export function watch(
           return signalGetter(s)
         }
       })
+  }
+  else {
+    getter = NOOP
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        'Invalid watch source. Source must be a signal, a computed value !',
+      )
+    }
   }
   if (cb && deep) {
     const baseGetter = getter

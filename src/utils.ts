@@ -37,3 +37,5 @@ export const isPlainObject = (val: unknown): val is object =>
 
 export const hasChanged = (value: any, oldValue: any): boolean =>
   !Object.is(value, oldValue)
+
+export function NOOP() {}
