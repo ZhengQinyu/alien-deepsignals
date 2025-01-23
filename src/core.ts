@@ -39,6 +39,7 @@ export function signal<T>(oldValue?: T): Signal<T | undefined> {
 
 export class Signal<T = any> implements Dependency {
   public readonly [ReactiveFlags.IS_SIGNAL] = true
+  public readonly [ReactiveFlags.SKIP] = true
   // Dependency fields
   subs: Link | undefined = undefined;
   subsTail: Link | undefined = undefined;
@@ -145,13 +146,22 @@ export function effect<T>(fn: () => T): Effect<T> {
   return e;
 }
 
+export enum EffectFlags {
+  /**
+   * ReactiveEffect only
+   */
+  ALLOW_RECURSE = 1 << 7,
+  PAUSED = 1 << 8,
+  NOTIFIED = 1 << 9,
+  STOP = 1 << 10,
+}
+
 export class Effect<T = any> implements Subscriber {
   readonly [ReactiveFlags.IS_SIGNAL] = true
   // Subscriber fields
   deps: Link | undefined = undefined;
   depsTail: Link | undefined = undefined;
   flags: SubscriberFlags = SubscriberFlags.Effect;
-
   constructor(
     public fn: () => T
   ) { }
@@ -162,8 +172,28 @@ export class Effect<T = any> implements Subscriber {
       flags & SubscriberFlags.Dirty
       || (flags & SubscriberFlags.PendingComputed && updateDirtyFlag(this, flags))
     ) {
-      this.run();
+      this.scheduler();
     }
+  }
+
+  scheduler(): void {
+    if (this.dirty) {
+      this.run()
+    }
+  }
+  get active(): boolean {
+    return !(this.flags & EffectFlags.STOP)
+  }
+
+  get dirty(): boolean {
+    const flags = this.flags
+    if (
+      flags & SubscriberFlags.Dirty ||
+      (flags & SubscriberFlags.PendingComputed && updateDirtyFlag(this, flags))
+    ) {
+      return true
+    }
+    return false
   }
 
   run(): T {

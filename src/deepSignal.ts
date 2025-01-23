@@ -1,3 +1,4 @@
+import { ReactiveFlags } from "./contents";
 import { computed, Signal, signal } from "./core";
 
 const proxyToSignals = new WeakMap();
@@ -8,6 +9,14 @@ const objToIterable = new WeakMap();
 const rg = /^\$/;
 const descriptor = Object.getOwnPropertyDescriptor;
 let peeking = false;
+
+export const isDeepSignal = (source: any) => {
+  return proxyToSignals.has(source);
+}
+
+export const isShallow = (source: any) => {
+  return ignore.has(source)
+}
 
 export const deepSignal = <T extends object>(obj: T): DeepSignal<T> => {
   if (!shouldProxy(obj)) throw new Error("This object can't be observed.");
@@ -31,7 +40,7 @@ export const peek = <
   return value as RevertDeepSignal<RevertDeepSignalObject<T>[K]>;
 };
 
-const isShallow = Symbol("shallow");
+const shallowFlag = Symbol(ReactiveFlags.IS_SHALLOW);
 export function shallow<T extends object>(obj: T): Shallow<T> {
   ignore.add(obj);
   return obj as Shallow<T>;
@@ -84,6 +93,7 @@ const get =
           signals.set(key, signal(value));
         }
       }
+      // deep getter
       return returnSignal ? signals.get(key) : signals.get(key).get();
     };
 
@@ -153,7 +163,7 @@ const shouldProxy = (val: any): boolean => {
 
 export type DeepSignal<T> = T extends Function
   ? T
-  : T extends { [isShallow]: true }
+  : T extends { [shallowFlag]: true }
   ? T
   : T extends Array<unknown>
   ? DeepSignalArray<T>
@@ -274,7 +284,7 @@ type DeepSignalArray<T> = DeepArray<ArrayType<T>> & {
   $length?: Signal<number>;
 };
 
-export type Shallow<T extends object> = T & { [isShallow]: true };
+export type Shallow<T extends object> = T & { [shallowFlag]: true };
 
 export declare const useDeepSignal: <T extends object>(obj: T) => DeepSignal<T>;
 // @ts-ignore
