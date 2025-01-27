@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { deepSignal } from "../deepSignal";
 import { watch } from "../watch";
+import { watchEffect } from "../watchEffect";
 
 describe('watch', () => {
   it('watch immediate', () => {
@@ -60,5 +61,21 @@ describe('watch', () => {
     store.userinfo.name = "jon"
     expect(val).not.toEqual("jon")
     expect(val).toEqual("tom")
+  })
+
+  it('watch effect', () => {
+    const store = deepSignal({
+      userinfo: {
+        name: "tom"
+      }
+    })
+    let x = undefined
+    watchEffect(() => {
+      x = store.userinfo.name
+    })
+
+    expect(x).toEqual("tom")
+    store.userinfo.name = "jon"
+    expect(x).toEqual("jon")
   })
 })

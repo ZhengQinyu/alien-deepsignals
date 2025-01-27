@@ -1,6 +1,7 @@
 export * from "./core";
 export * from "./deepSignal";
 export * from "./watch"
+export * from "./watchEffect"
 export {
   isArray,
   isDate,

@@ -1,5 +1,5 @@
 import { Computed, Effect, isSignal, Signal } from './core';
-import { hasChanged, isArray, isMap, isObject, isPlainObject, isSet, NOOP } from './utils';
+import { hasChanged, isArray, isFunction, isMap, isObject, isPlainObject, isSet, NOOP } from './utils';
 import { isDeepSignal, isShallow } from "./deepSignal"
 import { ReactiveFlags } from './contents';
 
@@ -23,6 +23,39 @@ export type WatchCallback<V = any, OV = any> = (
 const INITIAL_WATCHER_VALUE = {}
 let activeWatcher!: Effect
 
+// const resetTrackingStack: (Subscriber | undefined)[] = []
+
+// export let activeSub: Subscriber | undefined = undefined
+
+// export function setActiveSub(sub: Subscriber | undefined): void {
+//   activeSub = sub
+// }
+// /**
+//  * Temporarily pauses tracking.
+//  */
+// export function pauseTracking(): void {
+//   resetTrackingStack.push(activeSub)
+//   activeSub = undefined
+// }
+
+// /**
+//  * Resets the previous global effect tracking state.
+//  */
+// export function resetTracking(): void {
+//   if (process.env.NODE_ENV !== 'production'
+//     && resetTrackingStack.length === 0) {
+//     console.warn(
+//       `resetTracking() was called when there was no active tracking ` +
+//       `to reset.`,
+//     )
+//   }
+//   if (resetTrackingStack.length) {
+//     activeSub = resetTrackingStack.pop()!
+//   } else {
+//     activeSub = undefined
+//   }
+// }
+
 export const remove = <T>(arr: T[], el: T): void => {
   const i = arr.indexOf(el)
   if (i > -1) {
@@ -41,7 +74,7 @@ export function watch(
   let getter!: () => any
   let forceTrigger = false
   let isMultiSource = false
-
+  // let cleanup = NOOP
   const signalGetter = (source: object) => {
     // traverse will happen in wrapped getter below
     if (deep) return source
@@ -82,8 +115,31 @@ export function watch(
           return signalGetter(s)
         }
       })
-  }
-  else {
+  } else if (isFunction(source)) {
+    if (cb) {
+      // getter with cb
+      getter = (source as () => any)
+    } else {
+      // no cb -> simple effect
+      getter = () => {
+        // if (cleanup) {
+        //   pauseTracking()
+        //   try {
+        //     cleanup()
+        //   } finally {
+        //     resetTracking()
+        //   }
+        // }
+        const currentEffect = activeWatcher
+        activeWatcher = effect
+        try {
+          return source(effect.stop)
+        } finally {
+          activeWatcher = currentEffect
+        }
+      }
+    }
+  } else {
     getter = NOOP
     if (process.env.NODE_ENV !== 'production') {
       console.warn(
@@ -156,7 +212,6 @@ export function watch(
   }
   return watchHandle
 }
-
 
 export function traverse(
   value: unknown,
