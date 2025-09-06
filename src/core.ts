@@ -19,8 +19,24 @@ const {
   },
 });
 
+const pauseStack: (Subscriber | undefined)[] = [];
 let activeSub: Subscriber | undefined = undefined;
 let batchDepth = 0;
+
+export function pauseTracking() {
+	pauseStack.push(activeSub);
+	activeSub = undefined;
+}
+
+export function resumeTracking() {
+	activeSub = pauseStack.pop();
+}
+
+export const untracked = <T>(fn: () => T): T => {
+  pauseTracking();
+  try { return fn(); }
+  finally { resumeTracking(); }
+};
 
 export function startBatch(): void {
   ++batchDepth;
@@ -137,7 +153,7 @@ export class Computed<T = any> implements Subscriber, Dependency {
   }
 
   peek(): T {
-    return this.currentValue!;
+    return untracked(this.getter);
   }
 }
 
