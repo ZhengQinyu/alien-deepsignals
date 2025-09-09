@@ -1,4 +1,4 @@
-import { deepSignal, peek, RevertDeepSignal, shallow } from "../index"
+import { computed, deepSignal, peek, RevertDeepSignal, shallow } from "../index"
 import { describe, it, expect, beforeEach } from "vitest"
 import { signal, Signal, effect } from "..";
 type Store = {
@@ -838,6 +838,20 @@ describe("deepsignal/core", () => {
 			expect(typeof nested === "object" && nested.b).to.equal(2);
 			expect(peek(store.array, "length")).to.equal(2);
 		});
+
+		it('should return correct values when using peek() by computed', ()=>{
+			const counter = signal(1)
+			const store = computed(()=> counter.value)
+			expect(store.peek()).to.equal(1);
+			let updateValue
+			effect(()=>{
+				updateValue = store.peek()
+			})
+			expect(updateValue).to.equal(1);
+			counter.value = 2
+			expect(updateValue).to.equal(1);
+			expect(store.peek()).to.equal(2);
+		})
 
 		// it("should not subscribe to changes when peeking", () => {
 		// 	const spy1 = sinon.spy(() => peek(store, "a"));
